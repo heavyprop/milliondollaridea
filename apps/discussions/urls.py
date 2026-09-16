@@ -2,11 +2,12 @@ from django.urls import path
 
 from .views.comments import create_comment
 from .views.interactions import like_comment, like_thread, record_thread_view
-from .views.posts import create_thread, thread_detail
+from .views.posts import create_thread, thread_detail, delete_thread
 from .views.subjects import create_subject, subject_detail
 
 urlpatterns = [
     path("create/", create_thread, name="create_thread"),
+    path("<int:thread_id>/delete/", delete_thread, name="delete_thread"),
     path("subjects/create/", create_subject, name="create_subject"),
     path("subjects/<int:subject_id>/", subject_detail, name="subject_detail"),
     path("<int:thread_id>/", thread_detail, name="thread_detail"),

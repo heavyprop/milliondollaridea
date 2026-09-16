@@ -10,11 +10,15 @@
     <article class="post-detail" data-view-url="{% url 'record_thread_view' thread.id %}">
         <header class="page-heading">
             {% if thread.subject %}<a class="eyebrow" href="{% url 'subject_detail' thread.subject.id %}">{{ thread.subject.title }}</a>{% else %}<p class="eyebrow">Conversation</p>{% endif %}
-            <h1>{{ thread.title }}</h1>
-            <div class="post-meta"><span>{{ thread.author.username }}</span><time datetime="{{ thread.created_at|date:'c' }}">{{ thread.created_at|date:"j F Y" }}</time><span>{{ thread.view_count }} view{{ thread.view_count|pluralize }}</span></div>
+            <h1>{{ thread.title }}</h1>  
+            <div class="post-meta"><span><a href="{% url 'view_user' username=thread.author.username %}">{{ thread.author.username }}</a></span><time datetime="{{ thread.created_at|date:'c' }}">{{ thread.created_at|date:"j F Y" }}</time><span>{{ thread.view_count }} view{{ thread.view_count|pluralize }}</span></div>
         </header>
         <div class="prose">{% render_post_content thread.description %}</div>
+        
         <footer class="detail-actions">{% include "discussions/partials/like_button.html" %}</footer>
+        
+        <footer class="detail-actions">{% include "discussions/partials/delete_button.html" %}</footer>
+        
     </article>
     <section class="comments" aria-labelledby="comments-title">
         <div class="section-heading"><h2 id="comments-title">Conversation</h2></div>

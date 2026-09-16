@@ -62,3 +62,4 @@ def record_unique_thread_view(thread, user):
         Thread.objects.filter(id=thread.id).update(views=F("views") + 1)
 
     return view
+

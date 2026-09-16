@@ -1,0 +1,8 @@
+{% if request.user == thread.author %}
+  <div class="delete-control" id="thread-{{ thread.id }}-delete">
+      <form method="post" action="{% url 'delete_thread' thread.id %}">
+          {% csrf_token %}
+          <button class="button button-secondary" type="submit">Delete</button>
+      </form>
+  </div>
+{% endif %}

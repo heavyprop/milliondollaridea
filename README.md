@@ -25,6 +25,14 @@ The first run downloads and builds dependencies, creates the database tables, an
 
 Register an account on the site. Your database starts empty; cloning does not copy anyone else's users, posts, or uploads.
 
+To populate the site with 12 sample posts across four subjects, run in a second terminal:
+
+```bash
+docker compose exec web python manage.py seed_demo
+```
+
+Posts are marked `[Sample]` and owned by `sample_content`, an account with no usable password. The command uses normal topic classification, so the first run may download the model. Rerunning skips existing sample posts. Existing posts are kept.
+
 ## Develop
 
 Keep the terminal running and edit the project in your usual editor:

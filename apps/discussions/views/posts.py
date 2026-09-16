@@ -33,6 +33,15 @@ def create_thread(request):
 
     return render(request, "discussions/create_thread.html", {"subjects": subjects})
 
+@login_required
+@limit_requests(rate="1/m", group="delete_thread", method="GET")
+def delete_thread(request, thread_id):
+    if request.method == "POST":
+        thread = get_object_or_404(Thread, id=thread_id, author=request.user)
+
+        thread.delete()
+        return redirect("home")
+
 
 @login_required
 @limit_requests(rate="8/m", group="thread_detail", method="GET")
@@ -53,5 +62,6 @@ def thread_detail(request, thread_id):
         {
             "thread": thread,
             "comments": top_level_comments,
+            "is_user": thread.author == request.user,
         },
     )

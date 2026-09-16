@@ -112,7 +112,8 @@ button, a, input, select, textarea, summary { -webkit-tap-highlight-color: trans
 [data-copy-target][hidden] { display: none; }
 .profile-link { max-width: 160px; overflow: hidden; text-overflow: ellipsis; }
 .nav-search { display: flex; align-items: center; gap: 4px; width: 100%; padding: 3px 5px 3px 12px; background: #ededf0; border: 1px solid var(--line); border-radius: 999px; }
-.nav-search:focus-within { border-color: #0071e3; box-shadow: 0 0 0 2px rgb(0 113 227 / 12%); }
+.nav-search:focus-within { border-color: #0071e3; box-shadow: none; }
+.nav-search input[type="search"]:focus-visible { outline: none; }
 .nav-search .button { border-radius: 999px; flex-shrink: 0; }
 .nav-search input[type="search"] { min-height: 34px; padding: 6px 10px; background: #ededf0; border-color: transparent; font-size: 13px; }
 .page-content { max-width: 1168px; min-height: calc(100vh - 154px); margin: auto; padding: 56px 24px 88px; }
@@ -189,6 +190,15 @@ label { display: block; font-size: 14px; font-weight: 500; margin-bottom: 9px; }
 .account-details > div { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding: 18px 0; border-bottom: 1px solid var(--line); }
 .account-details dt { font-size: 14px; color: var(--muted); }
 .account-details dd { margin: 0; font-size: 17px; overflow-wrap: anywhere; }
+.profile-page .page-heading h1 { overflow-wrap: anywhere; }
+.profile-signout { margin-top: 12px; }
+.blocked-users-toggle { display: flex; align-items: center; justify-content: space-between; gap: 16px; width: 100%; padding: 0; min-height: 44px; border: 0; background: transparent; color: var(--ink); font: inherit; text-align: left; cursor: pointer; }
+.blocked-users-toggle:hover { color: #0066cc; }
+.blocked-users-chevron { flex-shrink: 0; }
+.blocked-users-toggle[aria-expanded="true"] .blocked-users-chevron { transform: rotate(180deg); }
+.blocked-users-list { list-style: none; padding: 0; }
+.blocked-users-list a { justify-content: space-between; width: 100%; }
+.blocked-users-list a > span:first-child { min-width: 0; overflow-wrap: anywhere; }
 .search-form { display: flex; gap: 12px; align-items: center; margin: 0 0 42px; }
 .empty-state { padding: 44px 32px; }
 .empty-state h3 { font-size: 23px; margin-bottom: 12px; }

@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block title %}{{ username }} | UnTrainable{% endblock %}
+{% block content %}
+    {% include "accounts/partials/profile_layout.html" with own_profile=False %}
+{% endblock %}
