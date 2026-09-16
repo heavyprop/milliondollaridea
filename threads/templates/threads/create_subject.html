@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Create subject | UnTrainable{% endblock %}
+{% block content %}
+<div class="narrow-page">
+    <a class="back-link" href="{% url 'home' %}">‹ Discover</a>
+    <header class="page-heading"><p class="eyebrow">Make room for an interest</p><h1>Create a subject.</h1><p class="lead">Give people a place to explore something together.</p></header>
+    <form method="post" class="editor-form panel">
+        {% csrf_token %}
+        {% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
+        <div class="field"><label for="title">Subject name</label><input id="title" name="title" type="text" maxlength="50" value="{{ request.POST.title }}" aria-describedby="title-hint" {% if error %}aria-invalid="true"{% endif %} placeholder="For example, Photography" required><p class="field-hint" id="title-hint">Keep it clear and specific. Up to 50 characters.</p></div>
+        <div class="field"><label for="description">Description</label><textarea id="description" name="description" rows="6" placeholder="What belongs in this subject?" required>{{ request.POST.description }}</textarea></div>
+        <div class="form-actions"><button class="button" type="submit">Create subject</button><a href="{% url 'home' %}">Cancel</a></div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% load static %}
+<header class="site-header">
+    <nav class="site-nav" aria-label="Main navigation">
+        <div class="nav-start">
+        <a class="wordmark" href="{% url 'home' %}"><img class="site-logo" src="{% static 'images/logo.png' %}?v=2967965d" alt="UnTrainable" width="52" height="52"></a>
+        {% if user.is_authenticated %}
+            <div class="nav-sections">
+                <a class="nav-link" href="{% url 'home' %}" {% if request.resolver_match.url_name == 'home' %}aria-current="page"{% elif request.resolver_match.app_name != 'hosting' and request.resolver_match.url_name != 'profile' %}aria-current="true"{% endif %}>Secure Feed</a>
+                <a class="nav-link" href="{% url 'hosting:index' %}" {% if request.resolver_match.app_name == 'hosting' %}aria-current="page"{% endif %}>Secure Hosting</a>
+            </div>
+        {% endif %}
+        </div>
+        {% if user.is_authenticated %}
+            {% if request.resolver_match.app_name != 'hosting' %}
+            <form class="nav-search" action="{% url 'search' %}" method="get" role="search">
+                <label class="visually-hidden" for="topbar-search">Search posts</label>
+                <input id="topbar-search" type="search" name="q" value="{{ request.GET.q }}" placeholder="Search posts">
+                <button class="button button-quiet" type="submit">Search</button>
+            </form>
+            {% endif %}
+            <a class="nav-link profile-link" href="{% url 'profile' %}" {% if request.resolver_match.url_name == 'profile' %}aria-current="page"{% endif %}>{{ user.username }}</a>
+        {% else %}
+            <a class="nav-link" href="/accounts/#signin">Sign in</a>
+            <a class="button" href="/accounts/#signup">Create account</a>
+        {% endif %}
+    </nav>
+</header>

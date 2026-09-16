@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Secure Hosting | UnTrainable{% endblock %}
+{% block content %}
+<header class="page-heading cli-heading">
+    <p class="eyebrow">Secure Hosting / Projects</p>
+    <h1>Secure Hosting.</h1>
+    <p class="lead">Files, examples, and projects to back up your feed.</p>
+    <p class="hosting-first-time"><span>First time using Secure Hosting?</span> <a href="{% url 'hosting:help' %}">See how it works <span aria-hidden="true">→</span></a></p>
+</header>
+<div class="cli-setup-layout">
+<section class="cli-steps cli-step hosting-catalog" aria-labelledby="projects-title">
+    <div class="section-heading">
+        <h2 id="projects-title">Explore projects</h2>
+        <span class="muted hosting-project-count">{{ page_obj.paginator.count }} project{{ page_obj.paginator.count|pluralize }}</span>
+    </div>
+    <p class="cli-description">Browse shared work and open the files behind each project.</p>
+    {% if page_obj %}
+    <div class="post-list">
+        {% for project in page_obj %}
+        <article class="post-preview">
+            <div class="post-meta"><span>{{ project.owner.username }}/{{ project.slug }}</span><span>{{ project.get_visibility_display }}</span>{% if project.is_archived %}<span>Archived</span>{% endif %}<time datetime="{{ project.updated_at|date:'c' }}">{{ project.updated_at|date:"j M Y" }}</time></div>
+            <h3><a href="{% url 'hosting:project_detail' project.owner.username project.slug %}">{{ project.name }}</a></h3>
+            {% if project.description %}<p class="post-excerpt">{{ project.description|truncatechars:220 }}</p>{% endif %}
+            {% if project.current_upload %}<p class="field-hint"><code>safe get {{ project.owner.username }}/{{ project.slug }}</code></p>{% endif %}
+            <footer class="post-footer">
+                <div class="post-stats">{% if project.current_upload %}<span>{{ project.current_upload.file_count }} file{{ project.current_upload.file_count|pluralize }}</span><span>{{ project.current_upload.archive_size|filesizeformat }}</span>{% else %}<span>No files uploaded yet.</span>{% endif %}</div>
+                <a class="text-link" href="{% url 'hosting:project_detail' project.owner.username project.slug %}">Browse files <span aria-hidden="true">↗</span></a>
+            </footer>
+        </article>
+        {% endfor %}
+    </div>
+    {% if page_obj.has_other_pages %}
+    <nav class="panel-actions actions" aria-label="Project pages">
+        {% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}">Previous</a>{% endif %}
+        <span class="muted">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}">Next</a>{% endif %}
+    </nav>
+    {% endif %}
+    {% else %}
+    <div class="panel hosting-empty">
+        <h3>No projects yet.</h3>
+        <p class="muted">Connect Safe to your account and publish a folder to share your first project.</p>
+        <a class="text-link cli-another-token" href="{% url 'hosting:cli_access' %}">Set up Safe CLI <span aria-hidden="true">→</span></a>
+    </div>
+    {% endif %}
+</section>
+<aside class="cli-access-sidebar" aria-label="Publishing and hosting help">
+    <section class="panel cli-account" aria-labelledby="publish-project-title">
+        <p class="eyebrow">Share your work</p>
+        <h2 id="publish-project-title" class="cli-account-name">Publish your first project.</h2>
+        <p class="field-hint">Connect your terminal to <strong>{{ user.username }}</strong>'s account, then upload a folder with Safe.</p>
+        <div class="panel-actions"><a class="button" href="{% url 'hosting:cli_access' %}">Set up Safe CLI</a></div>
+    </section>
+    <section class="cli-active-tokens" aria-labelledby="using-projects-title">
+        <div class="section-heading"><h2 id="using-projects-title">Using projects</h2></div>
+        <div class="cli-token-list">
+            <div class="cli-token-item"><div><h3>Support a feed post</h3><p class="field-hint">Link a project in your post so readers can explore its examples, documents, and code.</p></div></div>
+            <div class="cli-token-item"><div><h3>Browse and download</h3><p class="field-hint">Click a project to see its files. Preview text on the website or download the whole folder with Safe.</p></div></div>
+        </div>
+        <a class="text-link cli-another-token" href="{% url 'hosting:help' %}">How Secure Hosting works <span aria-hidden="true">→</span></a>
+    </section>
+</aside>
+</div>
+{% endblock %}

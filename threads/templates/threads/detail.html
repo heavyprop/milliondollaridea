@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static post_content %}
+{% block title %}{{ thread.title }} | UnTrainable{% endblock %}
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'threads/code_blocks.css' %}">
+{% endblock %}
+{% block content %}
+<div class="reading-width">
+    <a class="back-link" href="{% url 'home' %}">‹ Discover</a>
+    <article class="post-detail" data-view-url="{% url 'record_thread_view' thread.id %}">
+        <header class="page-heading">
+            {% if thread.subject %}<a class="eyebrow" href="{% url 'subject_detail' thread.subject.id %}">{{ thread.subject.title }}</a>{% else %}<p class="eyebrow">Conversation</p>{% endif %}
+            <h1>{{ thread.title }}</h1>
+            <div class="post-meta"><span>{{ thread.author.username }}</span><time datetime="{{ thread.created_at|date:'c' }}">{{ thread.created_at|date:"j F Y" }}</time><span>{{ thread.view_count }} view{{ thread.view_count|pluralize }}</span></div>
+        </header>
+        <div class="prose">{% render_post_content thread.description %}</div>
+        <footer class="detail-actions">{% include "threads/partials/like_button.html" %}</footer>
+    </article>
+    <section class="comments" aria-labelledby="comments-title">
+        <div class="section-heading"><h2 id="comments-title">Conversation</h2></div>
+        <form class="comment-form" method="post" action="{% url 'create_comment' thread.id %}">
+            {% csrf_token %}<div class="field"><label for="body">Add your perspective</label><textarea id="body" name="body" rows="4" placeholder="Write a thoughtful response…" required></textarea></div><button class="button" type="submit">Post comment</button>
+        </form>
+        <div class="comment-list">{% for comment in comments %}{% include "threads/partials/comment.html" %}{% empty %}<div class="empty-state compact"><p>No comments yet. Be the first to join in.</p></div>{% endfor %}</div>
+    </section>
+</div>
+{% endblock %}
+{% block extra_scripts %}
+    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+    <script src="{% static 'threads/view_tracking.js' %}"></script>
+    <script src="{% static 'threads/code_blocks.js' %}"></script>
+{% endblock %}

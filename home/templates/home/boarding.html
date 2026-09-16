@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}UnTrainable | A place for conversation{% endblock %}
+{% block content %}
+<header class="page-heading cli-heading">
+    <p class="eyebrow">UnTrainable / Welcome</p>
+    <h1>A place for your ideas.</h1>
+    <p class="lead">Conversations, files, and projects worth sharing.</p>
+    <p class="hosting-first-time">Already part of the community? <a href="{% url 'auth' %}#signin">Sign in <span aria-hidden="true">→</span></a></p>
+</header>
+<div class="cli-setup-layout">
+    <section class="cli-steps" aria-label="Explore UnTrainable">
+        <section class="cli-step">
+            <div class="cli-step-heading"><span class="eyebrow">01 / Discover</span><h2>Secure Feed</h2></div>
+            <p class="cli-description">Post an idea, ask a question, or find conversations around your interests. Subjects help you discover what to read next.</p>
+            <a class="text-link" href="{% url 'auth' %}#signup">Join the conversation <span aria-hidden="true">→</span></a>
+        </section>
+        <section class="cli-step">
+            <div class="cli-step-heading"><span class="eyebrow">02 / Share</span><h2>Secure Hosting</h2></div>
+            <p class="cli-description">Share files to support your posts. Give readers examples, documents, and code they can browse or download.</p>
+            <a class="text-link" href="{% url 'auth' %}#signup">Start sharing <span aria-hidden="true">→</span></a>
+        </section>
+    </section>
+    <aside class="cli-access-sidebar" aria-label="Get started">
+        <section class="panel cli-account">
+            <p class="eyebrow">Make yourself at home</p>
+            <h2 class="cli-account-name">Join the community.</h2>
+            <p class="field-hint">Create an account to post, reply, and share your work.</p>
+            <div class="panel-actions actions"><a class="button" href="{% url 'auth' %}#signup">Create account</a><a class="text-link" href="{% url 'auth' %}#signin">Sign in</a></div>
+        </section>
+    </aside>
+</div>
+{% endblock %}

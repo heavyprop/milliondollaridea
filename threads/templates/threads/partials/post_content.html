@@ -1,0 +1,14 @@
+{% for block in blocks %}
+    {% if block.kind == "code" %}
+        <figure class="code-block" data-code-block>
+            <figcaption class="code-block-header">
+                <span>{{ block.language }}</span>
+                <span class="code-copy-status" role="status" aria-live="polite"></span>
+                <button class="code-copy" type="button" hidden>Copy code</button>
+            </figcaption>
+            <pre class="code-block-source" tabindex="0" aria-label="{{ block.language }} code block"><code>{{ block.text }}</code></pre>
+        </figure>
+    {% else %}
+        <div class="post-text">{{ block.text|urlize|linebreaksbr }}</div>
+    {% endif %}
+{% endfor %}

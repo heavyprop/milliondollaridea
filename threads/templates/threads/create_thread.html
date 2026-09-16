@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Create post | UnTrainable{% endblock %}
+{% block content %}
+<header class="page-heading cli-heading">
+    <p class="eyebrow">Secure Feed / Create post</p>
+    <h1>Share an idea.</h1>
+    <p class="lead">A question, an observation, or something worth discussing.</p>
+    <p class="hosting-first-time"><a href="{% url 'home' %}">‹ Back to Secure Feed</a></p>
+</header>
+<div class="cli-setup-layout">
+    <section class="cli-steps cli-step hosting-catalog" aria-labelledby="post-editor-title">
+    <div class="section-heading"><h2 id="post-editor-title">Create your post</h2></div>
+    <p class="cli-description">Give your idea a title and a little context.</p>
+    <form method="post" class="editor-form panel">
+        {% csrf_token %}
+        <div class="field"><label for="title">Title</label><input id="title" name="title" type="text" maxlength="255" value="{{ request.POST.title }}" placeholder="What would you like to talk about?" required></div>
+        <div class="field"><label for="description">Your post</label><textarea id="description" name="description" rows="10" data-code-paste placeholder="Give your idea a little context…" required>{{ request.POST.description }}</textarea></div>
+        <div class="field"><label for="subject">Subject <span class="muted">(optional)</span></label><select id="subject" name="subject"><option value="">Choose a subject</option>{% for subject in subjects %}<option value="{{ subject.id }}" {% if request.POST.subject == subject.id|stringformat:"s" or not request.POST and request.GET.subject == subject.id|stringformat:"s" %}selected{% endif %}>{{ subject.title }}</option>{% endfor %}</select></div>
+        <div class="form-actions"><button class="button" type="submit">Publish post</button><a href="{% url 'home' %}">Cancel</a></div>
+    </form>
+    </section>
+    <aside class="cli-access-sidebar" aria-label="Writing tips">
+        <section class="panel cli-account">
+            <p class="eyebrow">Start a conversation</p>
+            <h2 class="cli-account-name">Make it easy to follow.</h2>
+            <p class="field-hint">Use a clear title and explain what you want to share or discuss. Choose a subject to help readers find your post.</p>
+        </section>
+        <section class="cli-active-tokens" aria-labelledby="post-extras-title">
+            <div class="section-heading"><h2 id="post-extras-title">Add more context</h2></div>
+            <div class="cli-token-list">
+                <div class="cli-token-item"><div><h3>Code and links</h3><p class="field-hint">Paste code into your post or include a link for readers to explore.</p></div></div>
+                <div class="cli-token-item"><div><h3>Files and examples</h3><p class="field-hint">Publish a project in Secure Hosting, then include its link in your post.</p></div></div>
+            </div>
+            <a class="text-link cli-another-token" href="{% url 'hosting:help' %}">How Secure Hosting works <span aria-hidden="true">→</span></a>
+        </section>
+    </aside>
+</div>
+{% endblock %}
+{% block extra_scripts %}<script src="{% static 'threads/code_paste.js' %}"></script>{% endblock %}

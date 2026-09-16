@@ -1,0 +1,10 @@
+{% load post_content %}
+<article class="post-preview">
+    <div class="post-meta"><span>{{ thread.author.username }}</span>{% if thread.subject %}<span aria-hidden="true">/</span><a href="{% url 'subject_detail' thread.subject.id %}">{{ thread.subject.title }}</a>{% endif %}<time datetime="{{ thread.created_at|date:'c' }}">{{ thread.created_at|date:"j M Y" }}</time></div>
+    <h3><a href="{% url 'thread_detail' thread.id %}">{{ thread.title }}</a></h3>
+    <p class="post-excerpt">{{ thread.description|preview_code|urlize|truncatechars_html:220|linebreaksbr }}</p>
+    <footer class="post-footer">
+        {% if show_stats %}<div class="post-stats"><span>{{ thread.likes }} like{{ thread.likes|pluralize }}</span><span>{{ thread.comment_count }} comment{{ thread.comment_count|pluralize }}</span><span>{{ thread.view_count }} view{{ thread.view_count|pluralize }}</span></div>{% endif %}
+        <a class="text-link" href="{% url 'thread_detail' thread.id %}">Read conversation <span aria-hidden="true">↗</span></a>
+    </footer>
+</article>

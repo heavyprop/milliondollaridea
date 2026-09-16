@@ -1,0 +1,8 @@
+<div class="like-control" id="comment-{{ comment.id }}-likes" aria-live="polite">
+    {% if comment.user_has_liked %}
+        <button class="button button-secondary" type="button" disabled>Liked</button>
+    {% else %}
+        <button class="button button-secondary" type="button" hx-post="{% url 'like_comment' comment.id %}" hx-target="#comment-{{ comment.id }}-likes" hx-swap="outerHTML" hx-disabled-elt="this" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>Like</button>
+    {% endif %}
+    <span class="meta">{{ comment.likes }} like{{ comment.likes|pluralize }}</span>
+</div>

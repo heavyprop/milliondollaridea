@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}How Secure Hosting works | UnTrainable{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'threads/code_blocks.css' %}">{% endblock %}
+{% block content %}
+    <a class="back-link" href="{% url 'hosting:index' %}">‹ Secure Hosting</a>
+    <header class="page-heading cli-heading">
+        <p class="eyebrow">Secure Hosting / Getting started</p>
+        <h1>Files for your conversations.</h1>
+        <p class="lead">Share the examples, documents, and project files behind your feed posts.</p>
+    </header>
+<div class="cli-setup-layout">
+    <div class="cli-steps">
+    <section class="cli-step" aria-labelledby="purpose-title">
+        <div class="cli-step-heading"><span class="subject-number" aria-hidden="true">01</span><h2 id="purpose-title">Put your files in a folder</h2></div>
+        <p class="cli-description">A hosting project is a folder of files you share through the site. Use it for a code example, a PDF that supports an explanation, or the files someone needs to follow your work.</p>
+        <div class="cli-example"><h3>For example</h3><p class="field-hint">A post explaining a Python script could link to a project containing the script, a README, and example data.</p></div>
+    </section>
+    <section class="cli-step" aria-labelledby="publish-title">
+        <div class="cli-step-heading"><span class="subject-number" aria-hidden="true">02</span><h2 id="publish-title">Publish your project</h2></div>
+        <p class="cli-description">Safe is the terminal tool that uploads your folder. Connect it to your account using the setup page, then run this command on your computer.</p>
+        {% include "threads/partials/post_content.html" with blocks=publish_blocks %}
+        <p class="field-hint">Replace <code>./my-project</code> with your folder's path. Its name becomes the project name, listed under the account you used to sign into Safe.</p>
+        <div class="cli-example"><h3>Updating your files</h3><p class="field-hint">Run the same command again to replace the project. Files you leave out of the folder are removed from the current upload. Previous versions aren't available to browse.</p></div>
+    </section>
+    <section class="cli-step" aria-labelledby="share-title">
+        <div class="cli-step-heading"><span class="subject-number" aria-hidden="true">03</span><h2 id="share-title">Link it in your feed post</h2></div>
+        <p class="cli-description">Open your project in Secure Hosting and copy its address from your browser. Paste that link into a feed post so readers can open the files alongside your explanation.</p>
+        <div class="cli-example"><h3>Show a particular file</h3><p class="field-hint">Click a file and copy that page's address to link directly to its preview. A project link is better for ongoing updates: publishing again replaces the individual file links.</p></div>
+        <p class="field-hint">Projects are visible to signed-in accounts by default. Only the owner and people given editing access can replace their files.</p>
+    </section>
+    <section class="cli-step" aria-labelledby="download-title">
+        <div class="cli-step-heading"><span class="subject-number" aria-hidden="true">04</span><h2 id="download-title">Download a copy</h2></div>
+        <p class="cli-description">Readers can browse files on the website or use Safe to download the whole project to their computer.</p>
+        {% include "threads/partials/post_content.html" with blocks=download_blocks %}
+        <p class="field-hint">Use the project's owner and name. Choose a destination folder that doesn't already exist.</p>
+    </section>
+    </div>
+    <aside class="cli-access-sidebar" aria-label="Hosting help and file information">
+        <section class="panel cli-account" aria-labelledby="setup-title">
+            <p class="eyebrow">Start here</p>
+            <h2 id="setup-title" class="cli-account-name">Connect Safe to your account.</h2>
+            <p class="field-hint">The setup page walks you through creating a token and signing in from your terminal.</p>
+            <div class="panel-actions"><a class="button" href="{% url 'hosting:cli_access' %}">Set up Safe CLI</a></div>
+        </section>
+        <section class="cli-active-tokens" aria-labelledby="preview-title">
+            <div class="section-heading"><h2 id="preview-title">What readers can open</h2></div>
+            <div class="cli-token-list">
+                <div class="cli-token-item"><div><h3>Code and text</h3><p class="field-hint">Open small UTF-8 text files in the browser. Code keeps its formatting and has a copy button.</p></div></div>
+                <div class="cli-token-item"><div><h3>Markdown</h3><p class="field-hint">Uses the same text and fenced-code formatting as feed posts.</p></div></div>
+                <div class="cli-token-item"><div><h3>PDFs, images, and archives</h3><p class="field-hint">Appear in the file list. Download the project with Safe to open these on your computer.</p></div></div>
+            </div>
+        </section>
+        <section class="cli-active-tokens" aria-labelledby="limits-title">
+            <div class="section-heading"><h2 id="limits-title">Before you publish</h2></div>
+            <p class="field-hint">Up to 25 MiB compressed, 100 MiB unpacked, and 2,000 ZIP entries. Browser text previews are limited to 256 KiB.</p>
+            <p class="field-hint">Keep passwords and API keys out of your project. Uploaded code is displayed as text; the website doesn't run it.</p>
+        </section>
+    </aside>
+</div>
+{% endblock %}
+{% block extra_scripts %}<script src="{% static 'threads/code_blocks.js' %}" defer></script>{% endblock %}

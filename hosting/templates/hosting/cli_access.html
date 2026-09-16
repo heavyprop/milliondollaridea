@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Set up Safe | Secure Hosting{% endblock %}
+{% block content %}
+<a class="back-link" href="{% url 'hosting:index' %}">‹ Secure Hosting</a>
+<header class="page-heading cli-heading">
+    <p class="eyebrow">Secure Hosting / Safe CLI</p>
+    <h1>Connect your terminal.</h1>
+    <p class="lead">Publish and download project folders with Safe. Set up access for your computer below.</p>
+</header>
+<div class="cli-setup-layout">
+    <div class="cli-steps">
+        <section class="cli-step" id="create-token" aria-labelledby="create-token-title">
+            <div class="cli-step-heading"><span class="subject-number" aria-hidden="true">01</span><h2 id="create-token-title">Create an access token</h2></div>
+            <p class="cli-description">This token lets Safe use <strong>{{ user.username }}</strong>'s account from the terminal. Give it a name so you can recognise it later.</p>
+            {% if token_secret %}
+            <div class="panel cli-token-result" id="token-result">
+                <p class="cli-token-title">Your token for {{ created_token.name }} is ready.</p>
+                <p class="field-hint">Copy it now and use it in step 2. You won't be able to view it again.</p>
+                <label class="visually-hidden" for="new-cli-token">Your new access token</label>
+                <div class="cli-token-copy">
+                    <input id="new-cli-token" class="cli-token-value" type="text" value="{{ token_secret }}" readonly autocomplete="off" spellcheck="false">
+                    <button class="button button-secondary" type="button" data-copy-target="new-cli-token" hidden>Copy token</button>
+                </div>
+                <span class="cli-copy-status" role="status" aria-live="polite"></span>
+                <p class="field-hint">{% if created_token.can_write %}Publish and download{% else %}Download only{% endif %} · Expires {{ created_token.expires_at|date:"j M Y" }}</p>
+            </div>
+            <a class="text-link cli-another-token" href="{% url 'hosting:cli_access' %}#create-token">Create another token</a>
+            {% else %}
+            <form class="cli-token-form" method="post" action="{% url 'hosting:cli_access' %}#create-token">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+                <div class="field">
+                    <label for="{{ form.name.id_for_label }}">Device name</label>
+                    {{ form.name }}{{ form.name.errors }}
+                    <p class="field-hint" id="device-name-hint">For example, “My MacBook” or “Work computer”.</p>
+                </div>
+                <div class="cli-permission">
+                    {{ form.can_write }}
+                    <div><label for="{{ form.can_write.id_for_label }}">Allow publishing</label><p class="field-hint">Upload and replace projects you can edit. Leave unchecked for downloads only.</p></div>
+                </div>
+                {{ form.can_write.errors }}
+                <div class="form-actions"><button class="button" type="submit">Create access token</button><span class="field-hint">Expires after 30 days</span></div>
+            </form>
+            {% endif %}
+        </section>
+        <section class="cli-step" aria-labelledby="connect-title">
+            <div class="cli-step-heading"><span class="subject-number" aria-hidden="true">02</span><h2 id="connect-title">Sign in from your terminal</h2></div>
+            <p class="cli-description">Open Terminal on your computer and run this command. Paste your token when asked, then press Enter.</p>
+            <div class="cli-copy-block">
+                <div class="cli-command"><pre><code id="login-command">{{ login_command }}</code></pre><button class="button button-quiet" type="button" data-copy-target="login-command" aria-label="Copy login command" hidden>Copy</button></div>
+                <span class="cli-copy-status" role="status" aria-live="polite"></span>
+            </div>
+            <p class="field-hint">The token stays hidden while you paste it. Safe should confirm you're connected as <strong>{{ user.username }}</strong>.</p>
+            <details class="cli-install">
+                <summary>Terminal says “safe: command not found”?</summary>
+                <p class="field-hint">From the website's source folder, activate its Python environment and install Safe:</p>
+                <div class="cli-copy-block"><div class="cli-command"><pre><code id="install-command">source .venv/bin/activate
+python -m pip install -e .</code></pre><button class="button button-quiet" type="button" data-copy-target="install-command" aria-label="Copy setup commands" hidden>Copy</button></div><span class="cli-copy-status" role="status" aria-live="polite"></span></div>
+                <p class="field-hint">Then run the sign-in command above.</p>
+            </details>
+        </section>
+        <section class="cli-step" aria-labelledby="transfer-title">
+            <div class="cli-step-heading"><span class="subject-number" aria-hidden="true">03</span><h2 id="transfer-title">Publish or download</h2></div>
+            <div class="cli-example">
+                <h3>Publish a folder</h3><p class="field-hint">Replace <code>./my-project</code> with the path to your folder.</p>
+                <div class="cli-copy-block"><div class="cli-command"><pre><code id="publish-command">safe publish ./my-project</code></pre><button class="button button-quiet" type="button" data-copy-target="publish-command" aria-label="Copy publish command" hidden>Copy</button></div><span class="cli-copy-status" role="status" aria-live="polite"></span></div>
+                <p class="field-hint">Publishing the same project again replaces its files.</p>
+            </div>
+            <div class="cli-example">
+                <h3>Download a project</h3><p class="field-hint">Use a project's name and choose a new destination folder.</p>
+                <div class="cli-copy-block"><div class="cli-command"><pre><code id="get-command">{{ get_command }}</code></pre><button class="button button-quiet" type="button" data-copy-target="get-command" aria-label="Copy download command" hidden>Copy</button></div><span class="cli-copy-status" role="status" aria-live="polite"></span></div>
+                <p class="field-hint">The destination folder must not already exist.</p>
+            </div>
+        </section>
+    </div>
+    <aside class="cli-access-sidebar" aria-label="Account and access tokens">
+        <section class="panel cli-account" aria-labelledby="cli-account-title">
+            <p class="eyebrow" id="cli-account-title">Account for this token</p>
+            <p class="cli-account-name">{{ user.username }}</p>
+            <p class="field-hint">New tokens on this page belong to this account.</p>
+            <p class="field-hint">Switching accounts on the website doesn't switch Safe. Run <code>safe login</code> with the new account's token to change it.</p>
+        </section>
+        <section class="cli-active-tokens" aria-labelledby="tokens-title">
+            <div class="section-heading"><h2 id="tokens-title">Your access tokens</h2><span class="muted">{{ tokens|length }}</span></div>
+            <p class="field-hint">Revoke a token to stop it accessing your account.</p>
+            <div class="cli-token-list">
+                {% for token in tokens %}
+                <div class="cli-token-item">
+                    <div><h3>{{ token.name }}</h3><p class="field-hint">{% if token.can_write %}Publish &amp; download{% else %}Download only{% endif %}<br>Expires {{ token.expires_at|date:"j M Y" }}</p></div>
+                    <form method="post" action="{% url 'hosting:revoke_token' token.id %}">{% csrf_token %}<button class="button button-secondary" type="submit" aria-label="Revoke {{ token.name }}">Revoke</button></form>
+                </div>
+                {% empty %}<p class="cli-token-empty muted">No active tokens yet. Create one in step 1 to get started.</p>{% endfor %}
+            </div>
+        </section>
+    </aside>
+</div>
+{% endblock %}
+{% block extra_scripts %}<script src="{% static 'hosting/cli_setup.js' %}" defer></script>{% endblock %}

@@ -1,0 +1,8 @@
+<div class="like-control" id="thread-{{ thread.id }}-likes" aria-live="polite">
+    {% if thread.user_has_liked %}
+        <button class="button button-secondary" type="button" disabled>Liked</button>
+    {% else %}
+        <button class="button button-secondary" type="button" hx-post="{% url 'like_thread' thread.id %}" hx-target="#thread-{{ thread.id }}-likes" hx-swap="outerHTML" hx-disabled-elt="this" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>Like</button>
+    {% endif %}
+    <span class="meta">{{ thread.likes }} like{{ thread.likes|pluralize }}</span>
+</div>
