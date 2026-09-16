@@ -1,0 +1,2 @@
+# Needed for post classification and non-empty searches.
+sentence-transformers==6.0.1

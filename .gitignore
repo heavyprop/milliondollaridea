@@ -5,3 +5,15 @@ __pycache__/
 /private_hosting/
 /build/
 /dist/
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.log
+
+.env
+.env.*
+!.env.example
+*.sqlite3
+/staticfiles/
+.ruff_cache/
+.local/

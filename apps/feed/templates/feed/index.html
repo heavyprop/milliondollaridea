@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Secure Feed | UnTrainable{% endblock %}
+{% block content %}
+<header class="page-heading cli-heading">
+    <p class="eyebrow">Secure Feed / Conversations</p>
+    <h1>Secure Feed.</h1>
+    <p class="lead">Ideas, questions, and conversations worth sharing.</p>
+    <p class="hosting-first-time">Welcome back, {{ username }}. <span class="muted encrypted-heading" data-shuffle-text aria-hidden="true">a3#&@</span></p>
+</header>
+<div class="cli-setup-layout">
+    {% include "feed/partials/conversations.html" %}
+    <aside class="cli-access-sidebar" aria-label="Posting and subjects">
+        <section class="panel cli-account" aria-labelledby="create-post-title">
+            <p class="eyebrow">Share your thoughts</p>
+            <h2 id="create-post-title" class="cli-account-name">Start a conversation.</h2>
+            <p class="field-hint">Post an idea, ask a question, or share what you've been working on.</p>
+            <div class="panel-actions"><a href="{% url 'create_thread' %}" class="button">Create post</a></div>
+        </section>
+        <div class="cli-active-tokens">{% include "discussions/partials/subjects.html" %}</div>
+    </aside>
+</div>
+{% endblock %}
+{% block extra_scripts %}
+    <script src="{% static 'feed/shuffle_text.js' %}" defer></script>
+{% endblock %}

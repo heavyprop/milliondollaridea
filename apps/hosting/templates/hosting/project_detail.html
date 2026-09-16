@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{% if file %}{{ file.path }} | {% endif %}{{ project.name }} | Secure Hosting{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="{% static 'site/code_blocks.css' %}">{% endblock %}
+{% block content %}
+<a class="back-link" href="{% url 'hosting:index' %}">‹ Secure Hosting</a>
+<header class="page-heading">
+    <p class="eyebrow">{{ project.owner.username }} / {{ project.slug }} · {{ project.get_visibility_display }}{% if project.is_archived %} · Archived{% endif %}</p>
+    <h1>{{ project.name }}</h1>
+    {% if project.description %}<p class="lead">{{ project.description }}</p>{% endif %}
+    {% if upload %}<p class="field-hint">{{ upload.file_count }} file{{ upload.file_count|pluralize }} · {{ upload.archive_size|filesizeformat }}</p><p class="field-hint"><code>safe get {{ project.owner.username }}/{{ project.slug }}</code></p>{% endif %}
+</header>
+{% if file %}
+<section aria-labelledby="file-title">
+    <a class="back-link" href="{% url 'hosting:project_detail' project.owner.username project.slug %}">‹ All files</a>
+    <div class="section-heading"><h2 id="file-title" class="hosting-file-path">{{ file.path }}</h2><span class="muted">{{ file.size|filesizeformat }}</span></div>
+    {% if preview_message %}<div class="panel"><p class="muted">{{ preview_message }}</p></div>{% else %}
+    <div class="prose">{% include "components/post_content.html" with blocks=blocks %}</div>
+    {% endif %}
+</section>
+{% else %}
+<section aria-labelledby="files-title">
+    <div class="section-heading"><h2 id="files-title">Files</h2></div>
+    <div class="post-list">
+        {% for entry in page_obj %}
+        <a class="hosting-file-row" href="{% url 'hosting:file_detail' project.owner.username project.slug entry.id %}">
+            <span class="hosting-file-path">{{ entry.path }}</span><span class="hosting-file-size">{{ entry.size|filesizeformat }}</span>
+        </a>
+        {% empty %}<div class="empty-state"><p>No files have been published yet.</p></div>{% endfor %}
+    </div>
+    {% if page_obj.has_other_pages %}
+    <nav class="panel-actions actions" aria-label="File pages">
+        {% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}">Previous</a>{% endif %}
+        <span class="muted">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}">Next</a>{% endif %}
+    </nav>
+    {% endif %}
+</section>
+{% endif %}
+{% endblock %}
+{% block extra_scripts %}<script src="{% static 'site/code_blocks.js' %}" defer></script>{% endblock %}

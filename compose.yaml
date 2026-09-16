@@ -1,0 +1,78 @@
+# Local development. Start everything with: docker compose up --build --watch
+services:
+  web:
+    build: .
+    init: true
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings.development
+      DJANGO_ENV_FILE: /dev/null
+      DJANGO_SECRET_KEY: development-only-replace-for-deployment
+      DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1,[::1]
+      DATABASE_URL: postgresql://untrainable:development@postgres:5432/untrainable
+      REDIS_URL: redis://redis:6379/1
+      GO_SEARCH_URL: http://search:8080/search
+      HOSTING_STORAGE_ROOT: /storage
+      WEB_PORT: ${WEB_PORT:-8000}
+    ports:
+      - "127.0.0.1:${WEB_PORT:-8000}:8000"
+    volumes:
+      - .:/app
+      - model_cache:/cache/huggingface
+      - hosting_data:/storage
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      search:
+        condition: service_started
+    develop:
+      watch:
+        - action: rebuild
+          path: requirements
+        - action: rebuild
+          path: pyproject.toml
+        - action: rebuild
+          path: Dockerfile
+        - action: rebuild
+          path: scripts/start_web.sh
+  search:
+    build: apps/search/go
+    environment:
+      DATABASE_URL: postgresql://untrainable:development@postgres:5432/untrainable
+      SEARCH_LISTEN_ADDR: 0.0.0.0:8080
+    depends_on:
+      postgres:
+        condition: service_healthy
+    develop:
+      watch:
+        - action: rebuild
+          path: apps/search/go
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: untrainable
+      POSTGRES_USER: untrainable
+      POSTGRES_PASSWORD: development
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5433}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U untrainable -d untrainable"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "127.0.0.1:${REDIS_PORT:-6380}:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+volumes:
+  postgres_data:
+  model_cache:
+  hosting_data:

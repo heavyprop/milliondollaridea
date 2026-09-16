@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Search | UnTrainable{% endblock %}
+{% block content %}
+<div class="reading-width">
+    <header class="page-heading"><p class="eyebrow">Discover something new</p><h1>Search conversations.</h1></header>
+    {% if query %}
+        <div class="section-heading"><h2>Results for “{{ query }}”</h2><span class="meta">{{ search_results|length }} result{{ search_results|length|pluralize }}</span></div>
+        <div class="post-list">{% for thread in search_results %}{% include "discussions/partials/post_preview.html" with show_stats=True %}{% empty %}<div class="empty-state"><h3>No posts found.</h3><p>Try a broader topic or a different keyword.</p><a class="text-link" href="{% url 'home' %}">Explore subjects ›</a></div>{% endfor %}</div>
+    {% else %}<p class="muted">Search by keyword or topic to find a conversation.</p>{% endif %}
+</div>
+{% endblock %}

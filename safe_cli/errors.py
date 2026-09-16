@@ -1,0 +1,2 @@
+class SafeError(Exception):
+    pass

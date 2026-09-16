@@ -10,7 +10,14 @@ requires-python = ">=3.10"
 dependencies = []
 
 [project.scripts]
-safe = "safe_cli.__main__:main"
+safe = "safe_cli.cli:main"
 
 [tool.setuptools]
 packages = ["safe_cli"]
+
+[tool.ruff]
+target-version = "py312"
+extend-exclude = ["**/migrations/*", "docs", "private_hosting", "staticfiles"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]

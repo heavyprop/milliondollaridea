@@ -1,0 +1,33 @@
+name: Checks
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+          cache: pip
+          cache-dependency-path: requirements/*.txt
+      - run: python -m pip install -r requirements/web.txt ruff==0.16.7
+      - run: python manage.py check --settings=config.settings.development
+      - run: python -m ruff check apps common config safe_cli scripts manage.py
+      - run: python -m ruff format --check apps common config safe_cli scripts manage.py
+  go:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/search/go
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: apps/search/go/go.mod
+          cache-dependency-path: apps/search/go/go.sum
+      - run: go vet ./...

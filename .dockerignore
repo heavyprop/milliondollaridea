@@ -1,0 +1,15 @@
+.git
+.env
+.env.*
+.venv
+.local
+**/__pycache__
+**/*.pyc
+**/.DS_Store
+**/*.egg-info
+.ruff_cache
+private_hosting
+staticfiles
+*.sqlite3
+build
+dist
