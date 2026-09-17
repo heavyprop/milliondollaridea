@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.urls import include, path
 
 urlpatterns = [
+    path("notifications/", include("apps.notifcation.urls")),
     path("", include("apps.feed.urls")),
     path("search/", include("apps.search.urls")),
     path("threads/", include("apps.discussions.urls")),

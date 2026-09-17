@@ -14,6 +14,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "apps.accounts.apps.AccountsConfig",
+    "apps.notifcation.apps.NotifcationConfig",
     "apps.discussions.apps.DiscussionsConfig",
     "apps.feed.apps.FeedConfig",
     "apps.search.apps.SearchConfig",

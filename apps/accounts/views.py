@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
 from apps.feed.selectors import users_threads
+from apps.notifcation.selectors import users_notifications
 
 from .models import UserBlock
 
@@ -59,6 +60,9 @@ def view_user(request, username):
             "username": user.username,
             "date": user.date_joined,
             "threads": users_threads(user),
+            "notifications": users_notifications(request.user)
+            if is_own_profile
+            else [],
             "is_blocked": UserBlock.objects.filter(
                 blocker=request.user, blocked=user
             ).exists(),

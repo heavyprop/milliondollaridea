@@ -34,14 +34,7 @@
                     <form class="profile-signout" method="post" action="{% url 'logout' %}">
                         {% csrf_token %}<button class="button button-quiet" type="submit">Sign out</button>
                     </form>
-                {% else %}
-                    <form class="panel-actions" method="post" action="{% if is_blocked %}{% url 'unblock_user' username=username %}{% else %}{% url 'block_user' username=username %}{% endif %}">
-                        {% csrf_token %}<button class="button button-secondary" type="submit">{% if is_blocked %}Unblock{% else %}Block{% endif %}</button>
-                    </form>
-                {% endif %}
-            </section>
-            {% if own_profile %}
-                <section class="cli-active-tokens" aria-label="Blocked users">
+                <section class="profile-blocked-controls" aria-label="Blocked users">
                     <h2>
                         <button class="blocked-users-toggle" type="button" id="blocked-users-toggle" aria-expanded="false" aria-controls="blocked-users-list">
                             <span>Blocked users</span>
@@ -60,6 +53,17 @@
                         </ul>
                     </div>
                 </section>
+                {% else %}
+                    <form class="panel-actions" method="post" action="{% if is_blocked %}{% url 'unblock_user' username=username %}{% else %}{% url 'block_user' username=username %}{% endif %}">
+                        {% csrf_token %}<button class="button button-secondary" type="submit">{% if is_blocked %}Unblock{% else %}Block{% endif %}</button>
+                    </form>
+                {% endif %}
+            </section>
+            {% if own_profile %}
+                <div class="cli-active-tokens">
+                    {% include "notifcation/partials/list.html" with notifications=notifications|slice:":5" %}
+                    <a class="text-link" href="{% url 'notifications' %}">View all notifications <span aria-hidden="true">↗</span></a>
+                </div>
             {% endif %}
         </aside>
     </div>

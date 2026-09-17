@@ -1,0 +1,19 @@
+<section class="subject-index" aria-labelledby="notifications-title">
+    <div class="section-heading"><h2 id="notifications-title">Notifications</h2></div>
+    <p class="muted">Recent activity on your posts.</p>
+    <ol class="subject-list">
+        {% for notification in notifications %}
+            <li>
+                <span class="subject-number" aria-hidden="true">{{ forloop.counter|stringformat:"02d" }}</span>
+                <div>
+                    <h3><a href="{% url 'thread_detail' notification.thread.id %}">{{ notification.thread.title|truncatechars:80 }}</a></h3>
+                    <p><a href="{% url 'view_user' username=notification.actor.username %}">{{ notification.actor.username }}</a> {% if notification.type == "like" %}liked your post.{% else %}commented on your post.{% endif %}</p>
+                    {% if notification.comment %}<p>{{ notification.comment.body|truncatechars:100 }}</p>{% endif %}
+                    <p><time datetime="{{ notification.created_at|date:'c' }}">{{ notification.created_at|date:"j M Y, H:i" }}</time></p>
+                </div>
+            </li>
+        {% empty %}
+            <li class="muted">No notifications yet.</li>
+        {% endfor %}
+    </ol>
+</section>

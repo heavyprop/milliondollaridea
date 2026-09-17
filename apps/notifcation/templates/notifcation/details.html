@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}Notifications | UnTrainable{% endblock %}
+{% block content %}
+<div class="reading-width">
+    <a class="back-link" href="{% url 'profile' %}">‹ Your profile</a>
+    {% include "notifcation/partials/list.html" %}
+</div>
+{% endblock %}
