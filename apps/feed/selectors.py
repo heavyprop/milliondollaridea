@@ -23,11 +23,8 @@ def popular_threads(user):
 
     return threads
 
+
 def users_threads(user):
-    threads = (
-        threads_with_stats()
-        .filter(author=user)
-        .order_by("-created_at")
-    )
+    threads = threads_with_stats().filter(author=user).order_by("-created_at")
 
     return threads

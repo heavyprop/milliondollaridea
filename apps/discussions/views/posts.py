@@ -33,6 +33,7 @@ def create_thread(request):
 
     return render(request, "discussions/create_thread.html", {"subjects": subjects})
 
+
 @login_required
 @limit_requests(rate="1/m", group="delete_thread", method="GET")
 def delete_thread(request, thread_id):

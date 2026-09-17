@@ -1,12 +1,13 @@
-from django.contrib.auth import login
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import get_user_model, login
-from django.shortcuts import get_object_or_404, redirect, render
-from apps.feed.selectors import users_threads
-from django.views.decorators.http import require_POST
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.http import HttpResponseBadRequest
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.http import require_POST
+
+from apps.feed.selectors import users_threads
 
 from .models import UserBlock
+
 
 def auth_page(request):
     if request.user.is_authenticated:
@@ -41,6 +42,7 @@ def auth_page(request):
         },
     )
 
+
 def view_user(request, username):
     if not request.user.is_authenticated:
         return redirect("home")
@@ -48,31 +50,36 @@ def view_user(request, username):
     user = get_object_or_404(get_user_model(), username=username)
     is_own_profile = user == request.user
 
-    template = (
-        "accounts/profile.html" if is_own_profile else "accounts/accounts.html"
-    )
+    template = "accounts/profile.html" if is_own_profile else "accounts/accounts.html"
 
-    return render(request, template, {
+    return render(
+        request,
+        template,
+        {
             "username": user.username,
             "date": user.date_joined,
             "threads": users_threads(user),
             "is_blocked": UserBlock.objects.filter(
                 blocker=request.user, blocked=user
             ).exists(),
-            "is_own_profile": user== request.user, # is primary key users primary key
+            "is_own_profile": user == request.user,  # is primary key users primary key
             "blocked_users": (
                 UserBlock.objects.filter(blocker=request.user)
                 .select_related("blocked")
                 .order_by("blocked__username")
-                if is_own_profile else []
+                if is_own_profile
+                else []
             ),
-        })
+        },
+    )
+
 
 def profile(request):
     if not request.user.is_authenticated:
         return redirect("home")
 
     return redirect("view_user", username=request.user.username)
+
 
 @require_POST
 def block_user(request, username):
@@ -84,10 +91,7 @@ def block_user(request, username):
     if user == request.user:
         return HttpResponseBadRequest("You cannot block yourself")
 
-    UserBlock.objects.get_or_create(
-        blocker=request.user,
-        blocked=user
-    )
+    UserBlock.objects.get_or_create(blocker=request.user, blocked=user)
 
     return redirect("home")
 

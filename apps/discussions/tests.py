@@ -9,16 +9,25 @@ from apps.discussions.models import Subject, Thread
 
 
 class SeedDemoTests(TestCase):
-    @patch("apps.discussions.services.posts.get_top_labels", return_value=[{"label": "test"}])
+    @patch(
+        "apps.discussions.services.posts.get_top_labels",
+        return_value=[{"label": "test"}],
+    )
     def test_repeat_run_preserves_posts_and_skips_classification(self, classify):
         author = get_user_model().objects.create_user(username="existing")
-        existing = Thread.objects.create(author=author, title="Existing", description="Keep me")
+        existing = Thread.objects.create(
+            author=author, title="Existing", description="Keep me"
+        )
         call_command("seed_demo", stdout=StringIO())
         call_command("seed_demo", stdout=StringIO())
         self.assertEqual(Thread.objects.count(), 13)
         self.assertEqual(Subject.objects.count(), 4)
         self.assertEqual(classify.call_count, 12)
-        self.assertFalse(get_user_model().objects.get(username="sample_content").has_usable_password())
+        self.assertFalse(
+            get_user_model()
+            .objects.get(username="sample_content")
+            .has_usable_password()
+        )
         existing.refresh_from_db()
         self.assertEqual(existing.description, "Keep me")
         sample = Thread.objects.exclude(pk=existing.pk).first()

@@ -1,7 +1,7 @@
 from django.contrib.auth.views import LogoutView
 from django.urls import path
 
-from .views import auth_page, profile, view_user, block_user, unblock_user
+from .views import auth_page, block_user, profile, unblock_user, view_user
 
 urlpatterns = [
     path("accounts/", auth_page, name="auth"),

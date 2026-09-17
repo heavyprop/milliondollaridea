@@ -2,7 +2,7 @@ from django.urls import path
 
 from .views.comments import create_comment
 from .views.interactions import like_comment, like_thread, record_thread_view
-from .views.posts import create_thread, thread_detail, delete_thread
+from .views.posts import create_thread, delete_thread, thread_detail
 from .views.subjects import create_subject, subject_detail
 
 urlpatterns = [
